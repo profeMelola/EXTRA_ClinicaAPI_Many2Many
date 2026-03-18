@@ -22,14 +22,13 @@ public interface MedicalServiceRepository extends JpaRepository<MedicalService, 
             sum(l.quantity),
             sum(l.lineTotal)
             )
-                from InvoiceLine l
-                    join l.invoice i
-                    join l.service s
-                where i.issuedAt is not null
-                and i.issuedAt >= :from and i.issuedAt <= :to
-                and (:status is null or i.status = :status)
+                from MedicalService s
+                    join s.lines l
+                where l.invoice.issuedAt is not null
+                and l.invoice.issuedAt >= :from and l.invoice.issuedAt <= :to
+                and (:status is null or l.invoice.status = :status)
             group by s.id, s.name
-            order by sum(l.lineTotal) desc
+            order by s.name desc
                 
     """)
     List<TopServiceReport> findServicesSummary(
