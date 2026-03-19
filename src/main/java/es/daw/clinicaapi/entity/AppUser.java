@@ -30,6 +30,12 @@ public class AppUser implements UserDetails {
     @Column(nullable=false)
     private boolean enabled = true;
 
+//    ¿Por qué EAGER? Spring Security -> getAuthorities() necesita los roles disponibles
+//    EAGER es aceptable pero en un entorno más profesional, muchas veces se prefiere LAZY
+//    y cargar roles con una consulta específica (join fetch o @EntityGraph)
+//    solo cuando se necesita autenticar.
+//    @EntityGraph: definir de forma declarativa qué relaciones se deben cargar junto con una entidad en una consulta concreta
+//     Te permite tener asociaciones en LAZY pero decidir en qué consultas se cargan como si fueran EAGER.
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "user_roles",
