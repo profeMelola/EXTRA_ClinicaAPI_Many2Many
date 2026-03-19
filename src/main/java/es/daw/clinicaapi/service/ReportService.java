@@ -1,6 +1,7 @@
 package es.daw.clinicaapi.service;
 
 
+import es.daw.clinicaapi.dto.report.ServiceSummaryReport;
 import es.daw.clinicaapi.dto.report.TopServiceReport;
 import es.daw.clinicaapi.enums.InvoiceStatus;
 import es.daw.clinicaapi.exception.BadRequestException;
@@ -90,16 +91,20 @@ public class ReportService {
      * @param status
      * @return
      */
-    public List<TopServiceReport> getTopServices(LocalDateTime from,
-                                                 LocalDateTime to,
-                                                 InvoiceStatus status) {
+    public List<ServiceSummaryReport> getServiceSummary(LocalDateTime from,
+                                                        LocalDateTime to,
+                                                        InvoiceStatus status) {
 
         // 1. VALIDACIONES Y REGLAS DE NEGOCIO
-        if (from.isBefore(LocalDateTime.now()) && to.isAfter(LocalDateTime.now()))
-            throw new BadRequestException("mal las fechas el to debe posterior al from !!!!!");
-
+        if (!from.isBefore(LocalDateTime.now()) && to.isAfter(LocalDateTime.now())) {
+            // Pendiente i18n... MessageSource, inyectar el Locale, añadir los códigos a message.properties
+            throw new BadRequestException("El from debe ser anterior a la fecha actual y el to no puede ser posterior");
+        }
+        if (from.isAfter(to))
+            throw new BadRequestException("El from debe ser anterior o igual al to....")
+;
         // 2. LLAMADA AL REPOSITORIO
-        return null;
+        return medicalServiceRepository.findServicesSummary(from, to, status);
 
     }
 

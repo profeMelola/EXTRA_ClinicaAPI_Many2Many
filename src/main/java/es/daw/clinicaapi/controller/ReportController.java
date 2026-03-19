@@ -138,9 +138,9 @@ public class ReportController {
         // PENDIENTE!!! MEJORA!!! USAR EXPRESIÓN REGULAR QUE CONTENGA : DRAFT, ISSUED, PAID, CANCELLED, PENDING
         // Validar vía expresión regular que status contenga uno de esos valores. Si no es así... lanzará
         // excepción MethodArgumentTypeMismatchException... o similar...
-        // @Valid @Pattern("xxxxxxxx") @RequestParam(required = false) InvoiceStatus status
+        // @Pattern("xxxxxxxx") @RequestParam(required = false) InvoiceStatus status
         // pte servicio..
-        List<ServiceSummaryReport> result = null;
+        List<ServiceSummaryReport> result = reportService.getServiceSummary(from,to,status);
         return ResponseEntity.ok(result);
 
     }

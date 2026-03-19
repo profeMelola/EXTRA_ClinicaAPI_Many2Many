@@ -5,7 +5,7 @@ import java.math.BigDecimal;
 public record ServiceSummaryReport(
         Long serviceId,
         String serviceName,
-        long invoiceLinesCount,
-        long totalQuantity,
+        Long invoiceLinesCount,
+        Long totalQuantity,
         BigDecimal totalBilledAmount
 ) {}
