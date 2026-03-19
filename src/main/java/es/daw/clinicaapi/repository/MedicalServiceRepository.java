@@ -22,13 +22,18 @@ public interface MedicalServiceRepository extends JpaRepository<MedicalService, 
     // PROBLEMAS ENCONTRADOS
     // 1. .NullPointerException: Cannot invoke "java.lang.Number.longValue()"
     // Los sum() devuelven null para servicios sin líneas facturadas, y los tipos primitivos long del record no admiten null.
+//    2. COALESCE: devuelve el primer valor no nulo de una lista de expresiones. Si todos los valores son nulos, devuelve null.
+//    Aplica coalesce a los tres agregados:
+//            coalesce(sum(l.quantity), 0L),
+//            coalesce(CAST(sum(l.lineTotal) AS bigdecimal), 0)
+
     @Query("""
         select new es.daw.clinicaapi.dto.report.ServiceSummaryReport(
             s.id,
             s.name,
             count(l),
             sum(l.quantity),
-            sum(l.lineTotal)
+            sum(l.lineTotal) 
             )
                 from MedicalService s
                 left join s.lines l
